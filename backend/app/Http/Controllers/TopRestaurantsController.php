@@ -36,7 +36,14 @@ class TopRestaurantsController extends Controller
             
             return response()->json([
                 'success' => true,
-                'data' => $topRestaurants,
+                'data' => [
+                    'date_range' => [
+                        'start_date' => $startDate,
+                        'end_date' => $endDate
+                    ],
+                    'top_restaurants' => $topRestaurants,
+                    'total_restaurants_analyzed' => 4
+                ],
                 'message' => 'Top restaurants retrieved successfully'
             ]);
             

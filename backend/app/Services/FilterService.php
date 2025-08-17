@@ -2,6 +2,8 @@
 
 namespace App\Services;
 
+use Illuminate\Support\Facades\Cache;
+
 class FilterService
 {
     private $dataService;
@@ -13,29 +15,33 @@ class FilterService
 
     public function searchRestaurants($query = null, $location = null, $cuisine = null)
     {
-        $restaurants = $this->dataService->getRestaurants();
+        $cacheKey = "search_" . md5($query . $location . $cuisine);
         
-        if ($query) {
-            $restaurants = array_filter($restaurants, function($restaurant) use ($query) {
-                return stripos($restaurant['name'], $query) !== false ||
-                       stripos($restaurant['location'], $query) !== false ||
-                       stripos($restaurant['cuisine'], $query) !== false;
-            });
-        }
-        
-        if ($location) {
-            $restaurants = array_filter($restaurants, function($restaurant) use ($location) {
-                return stripos($restaurant['location'], $location) !== false;
-            });
-        }
-        
-        if ($cuisine) {
-            $restaurants = array_filter($restaurants, function($restaurant) use ($cuisine) {
-                return stripos($restaurant['cuisine'], $cuisine) !== false;
-            });
-        }
-        
-        return array_values($restaurants);
+        return Cache::remember($cacheKey, 600, function () use ($query, $location, $cuisine) {
+            $restaurants = $this->dataService->getRestaurants();
+            
+            if ($query) {
+                $restaurants = array_filter($restaurants, function($restaurant) use ($query) {
+                    return stripos($restaurant['name'], $query) !== false ||
+                           stripos($restaurant['location'], $query) !== false ||
+                           stripos($restaurant['cuisine'], $query) !== false;
+                });
+            }
+            
+            if ($location) {
+                $restaurants = array_filter($restaurants, function($restaurant) use ($location) {
+                    return stripos($restaurant['location'], $location) !== false;
+                });
+            }
+            
+            if ($cuisine) {
+                $restaurants = array_filter($restaurants, function($restaurant) use ($cuisine) {
+                    return stripos($restaurant['cuisine'], $cuisine) !== false;
+                });
+            }
+            
+            return array_values($restaurants);
+        });
     }
 
     public function filterOrdersByDateRange($startDate = null, $endDate = null, $restaurantId = null, $minAmount = null, $maxAmount = null)

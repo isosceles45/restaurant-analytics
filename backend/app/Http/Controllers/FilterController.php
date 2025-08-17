@@ -46,6 +46,8 @@ class FilterController extends Controller
             $restaurantId = $request->get('restaurant_id');
             $minAmount = $request->get('min_amount');
             $maxAmount = $request->get('max_amount');
+            $page = (int) $request->get('page', 1);
+            $perPage = min((int) $request->get('per_page', 20), 100);
             
             $orders = $this->filterService->filterOrdersByDateRange(
                 $startDate, 
@@ -55,10 +57,19 @@ class FilterController extends Controller
                 $maxAmount
             );
             
+            $total = count($orders);
+            $offset = ($page - 1) * $perPage;
+            $paginatedOrders = array_slice($orders, $offset, $perPage);
+            
             return response()->json([
                 'success' => true,
-                'data' => $orders,
-                'count' => count($orders),
+                'data' => $paginatedOrders,
+                'pagination' => [
+                    'current_page' => $page,
+                    'per_page' => $perPage,
+                    'total' => $total,
+                    'last_page' => ceil($total / $perPage)
+                ],
                 'message' => 'Orders filtered successfully'
             ]);
             
