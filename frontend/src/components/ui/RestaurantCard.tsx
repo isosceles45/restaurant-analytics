@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { MapPin, Tag, BarChart3 } from 'lucide-react';
+import { MapPin, Tag, TrendingUp, Clock } from 'lucide-react';
 import { Restaurant } from '@/lib/types';
 import { formatCurrency } from '@/lib/utils';
 
@@ -8,62 +8,75 @@ interface RestaurantCardProps {
 }
 
 export default function RestaurantCard({ restaurant }: RestaurantCardProps) {
+  // Calculate useful metrics for comparison
+  const avgOrdersPerDay = restaurant.total_orders ? Math.round(restaurant.total_orders / 7) : null; // 7 days of data
+  const revenuePerOrder = restaurant.total_revenue && restaurant.total_orders 
+    ? restaurant.total_revenue / restaurant.total_orders 
+    : restaurant.average_order_value || 0;
+
   return (
-    <div className="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200 border border-gray-200">
+    <div className="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200 border border-gray-200 overflow-hidden">
       <div className="p-6">
-        <div className="flex items-center justify-between mb-4">
-          <h3 className="text-lg font-semibold text-gray-900">
+        {/* Header Section - Fixed Height */}
+        <div className="flex items-start justify-between mb-4 min-h-[48px]">
+          <h3 className="text-lg font-semibold text-gray-900 leading-tight pr-4">
             {restaurant.name}
           </h3>
-          <div className="flex items-center text-sm text-gray-500">
-            <Tag className="w-4 h-4 mr-1" />
-            {restaurant.cuisine}
+          <div className="flex items-center text-sm text-gray-500 whitespace-nowrap">
+            <Tag className="w-4 h-4 mr-1 flex-shrink-0" />
+            <span className="truncate">{restaurant.cuisine}</span>
           </div>
         </div>
         
-        <div className="flex items-center text-sm text-gray-600 mb-4">
-          <MapPin className="w-4 h-4 mr-1" />
-          {restaurant.location}
+        {/* Location Section - Fixed Height */}
+        <div className="flex items-center text-sm text-gray-600 mb-4 min-h-[20px]">
+          <MapPin className="w-4 h-4 mr-1 flex-shrink-0" />
+          <span className="truncate">{restaurant.location}</span>
         </div>
 
+        {/* Real Analytics Data - If available */}
         {restaurant.total_orders !== undefined && (
-          <div className="grid grid-cols-2 gap-4 mb-4">
-            <div className="text-center p-2 bg-blue-50 rounded">
-              <div className="text-xl font-bold text-blue-700">
+          <div className="grid grid-cols-2 gap-3 mb-4">
+            <div className="bg-blue-50 rounded-lg p-3 text-center">
+              <div className="text-lg font-bold text-blue-700">
                 {restaurant.total_orders}
               </div>
               <div className="text-xs text-blue-600">Total Orders</div>
             </div>
-            <div className="text-center p-2 bg-green-50 rounded">
-              <div className="text-xl font-bold text-green-700">
-                {formatCurrency(restaurant.total_revenue || 0)}
+            <div className="bg-green-50 rounded-lg p-3 text-center">
+              <div className="text-lg font-bold text-green-700">
+                {formatCurrency(revenuePerOrder)}
               </div>
-              <div className="text-xs text-green-600">Revenue</div>
+              <div className="text-xs text-green-600">Avg Value</div>
             </div>
           </div>
         )}
 
-        {restaurant.average_order_value !== undefined && (
-          <div className="text-center p-2 bg-purple-50 rounded mb-4">
-            <div className="text-lg font-semibold text-purple-700">
-              {formatCurrency(restaurant.average_order_value)}
+        {/* Performance Indicators */}
+        <div className="flex items-center justify-between mb-4">
+          {avgOrdersPerDay && (
+            <div className="flex items-center text-sm text-gray-600">
+              <Clock className="w-4 h-4 mr-1 text-blue-500" />
+              <span>{avgOrdersPerDay} orders/day</span>
             </div>
-            <div className="text-xs text-purple-600">Avg Order Value</div>
-          </div>
-        )}
+          )}
+          {restaurant.total_revenue && (
+            <div className="flex items-center text-sm">
+              <TrendingUp className="w-4 h-4 mr-1 text-green-500" />
+              <span className="font-medium text-green-700">
+                {formatCurrency(restaurant.total_revenue)}
+              </span>
+            </div>
+          )}
+        </div>
 
-        <div className="flex space-x-3">
+        {/* Action Buttons - Fixed Layout */}
+        <div className="flex gap-3">
           <Link
             href={`/restaurants/${restaurant.id}`}
-            className="flex-1 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium py-2 px-4 rounded-md text-center transition-colors duration-200"
+            className="flex-1 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium py-2.5 px-4 rounded-lg text-center transition-colors duration-200 min-h-[40px] flex items-center justify-center"
           >
-            View Details
-          </Link>
-          <Link
-            href={`/restaurants/${restaurant.id}/analytics`}
-            className="flex items-center justify-center bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm font-medium py-2 px-4 rounded-md transition-colors duration-200"
-          >
-            <BarChart3 className="w-4 h-4" />
+            View Analytics
           </Link>
         </div>
       </div>
