@@ -1,7 +1,10 @@
 import Link from 'next/link';
 import { MapPin, Tag, TrendingUp, Clock } from 'lucide-react';
+import { BarChart, Bar, ResponsiveContainer, XAxis, YAxis } from 'recharts';
+import { useQuery } from '@tanstack/react-query';
 import { Restaurant } from '@/lib/types';
-import { formatCurrency } from '@/lib/utils';
+import { formatCurrency, getDefaultDateRange } from '@/lib/utils';
+import { restaurantApi } from '@/lib/api';
 
 interface RestaurantCardProps {
   restaurant: Restaurant;
@@ -9,10 +12,28 @@ interface RestaurantCardProps {
 
 export default function RestaurantCard({ restaurant }: RestaurantCardProps) {
   // Calculate useful metrics for comparison
-  const avgOrdersPerDay = restaurant.total_orders ? Math.round(restaurant.total_orders / 7) : null; // 7 days of data
+  const avgOrdersPerDay = restaurant.total_orders ? Math.round(restaurant.total_orders / 7) : null;
   const revenuePerOrder = restaurant.total_revenue && restaurant.total_orders 
     ? restaurant.total_revenue / restaurant.total_orders 
     : restaurant.average_order_value || 0;
+
+  // Fetch real analytics data for the mini chart
+  const { start, end } = getDefaultDateRange();
+  const { data: analyticsData } = useQuery({
+    queryKey: ['restaurantAnalytics', restaurant.id, start, end],
+    queryFn: async () => {
+      const response = await restaurantApi.getAnalytics(restaurant.id, start, end);
+      return response.data;
+    },
+    enabled: !!restaurant.total_orders, // Only fetch if we have order data
+  });
+
+  // Create chart data from real API data
+  const chartData = analyticsData?.data?.daily_stats?.map(stat => ({
+    date: new Date(stat.date).toLocaleDateString('en', { weekday: 'short' }),
+    orders: stat.orders_count,
+    revenue: stat.revenue,
+  })) || null;
 
   return (
     <div className="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200 border border-gray-200 overflow-hidden">
@@ -48,6 +69,31 @@ export default function RestaurantCard({ restaurant }: RestaurantCardProps) {
                 {formatCurrency(revenuePerOrder)}
               </div>
               <div className="text-xs text-green-600">Avg Value</div>
+            </div>
+          </div>
+        )}
+
+        {/* Real Daily Trend Chart from API */}
+        {chartData && chartData.length > 0 && (
+          <div className="mb-4">
+            <div className="text-xs font-medium text-gray-700 mb-2">Daily Order Trend</div>
+            <div className="h-16 bg-gray-50 rounded-lg p-2">
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={chartData}>
+                  <XAxis 
+                    dataKey="date" 
+                    axisLine={false} 
+                    tickLine={false}
+                    tick={{ fontSize: 10, fill: '#6B7280' }}
+                  />
+                  <YAxis hide />
+                  <Bar 
+                    dataKey="orders" 
+                    fill="#3B82F6" 
+                    radius={[2, 2, 0, 0]}
+                  />
+                </BarChart>
+              </ResponsiveContainer>
             </div>
           </div>
         )}
