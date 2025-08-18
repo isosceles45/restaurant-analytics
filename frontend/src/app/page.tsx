@@ -1,133 +1,182 @@
 import Link from 'next/link';
-import { BarChart3, Store, TrendingUp, Users } from 'lucide-react';
+import { BarChart3, Store, TrendingUp, Users, Clock, ArrowRight } from 'lucide-react';
 
 export default function HomePage() {
+
+
   const features = [
     {
       icon: Store,
       title: 'Restaurant Management',
-      description: 'Browse, search, and filter restaurants by location, cuisine, and more.',
+      description: 'Browse, search, and filter restaurants by location, cuisine, and ratings with advanced filtering capabilities.',
       href: '/restaurants',
+      color: 'bg-blue-500',
+      hoverColor: 'hover:bg-blue-600',
     },
     {
       icon: BarChart3,
       title: 'Analytics Dashboard',
-      description: 'View comprehensive analytics and insights for top-performing restaurants.',
+      description: 'Comprehensive analytics and insights with real-time data visualization for performance tracking.',
       href: '/analytics',
+      color: 'bg-green-500',
+      hoverColor: 'hover:bg-green-600',
     },
     {
       icon: TrendingUp,
       title: 'Order Trends',
-      description: 'Track daily orders, revenue trends, and peak dining hours.',
+      description: 'Track daily orders, revenue patterns, and identify peak dining hours across all locations.',
       href: '/restaurants',
+      color: 'bg-purple-500',
+      hoverColor: 'hover:bg-purple-600',
     },
     {
       icon: Users,
       title: 'Performance Insights',
-      description: 'Compare restaurant performance and identify growth opportunities.',
+      description: 'Compare restaurant performance metrics and discover untapped growth opportunities.',
       href: '/analytics',
+      color: 'bg-orange-500',
+      hoverColor: 'hover:bg-orange-600',
     },
   ];
 
+  const stats = [
+    { number: '4', label: 'Active Restaurants', color: 'text-blue-600', icon: Store },
+    { number: '200+', label: 'Orders Analyzed', color: 'text-green-600', icon: TrendingUp },
+    { number: '7', label: 'Days of Data', color: 'text-purple-600', icon: Clock },
+    { number: '24/7', label: 'Real-time Monitoring', color: 'text-orange-600', icon: BarChart3 },
+  ];
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
-      {/* Navigation */}
-      <nav className="bg-white shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between h-16">
-            <div className="flex items-center">
-              <Link href="/" className="text-xl font-bold text-gray-900">
-                Restaurant Analytics
-              </Link>
-            </div>
-            <div className="flex items-center space-x-4">
-              <Link
-                href="/restaurants"
-                className="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium"
-              >
-                Restaurants
-              </Link>
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
+
+      {/* Hero Section */}
+      <div className="relative overflow-hidden">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-16">
+          <div className="text-center">
+            <h1 className="text-5xl md:text-6xl pb-2 font-bold bg-gradient-to-r from-gray-900 via-blue-900 to-indigo-900 bg-clip-text text-transparent mb-6">
+              Restaurant Analytics
+            </h1>
+            <p className="text-xl text-gray-600 mb-8 max-w-3xl mx-auto leading-relaxed">
+              Analyze order trends, track revenue patterns, and discover peak dining hours across 4 restaurants with 200+ orders analyzed. 
+              Make data-driven decisions to optimize your restaurant operations.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
               <Link
                 href="/analytics"
-                className="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium"
+                className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-8 py-4 rounded-xl font-semibold hover:from-blue-700 hover:to-indigo-700 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-1 flex items-center space-x-2"
               >
-                Analytics
+                <span>View Analytics</span>
+                <ArrowRight className="w-5 h-5" />
+              </Link>
+              <Link
+                href="/restaurants"
+                className="border-2 border-gray-300 text-gray-700 px-8 py-4 rounded-xl font-semibold hover:border-blue-500 hover:text-blue-600 transition-all duration-200 bg-white/50 backdrop-blur-sm"
+              >
+                Browse Restaurants
               </Link>
             </div>
           </div>
         </div>
-      </nav>
+      </div>
 
       {/* Features Section */}
-      <div className="max-w-7xl mx-auto mt-10 px-4 sm:px-6 lg:px-8 pb-20">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
         <div className="text-center mb-16">
-          <h2 className="text-3xl font-bold text-gray-900">
-            Get Powerfull Insights
+          <h2 className="text-3xl font-bold text-gray-900 mb-4">
+            Everything You Need to Succeed
           </h2>
-          <p className="mt-4 text-lg text-gray-600">
-            Everything you need to analyze restaurant performance and trends
+          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+            Powerful tools and insights to help you understand your restaurant performance and make data-driven decisions
           </p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-          {features.map((feature) => (
+          {features.map((feature, index) => (
             <Link
               key={feature.title}
               href={feature.href}
-              className="bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transition-shadow duration-300 border border-gray-200"
+              className="group bg-white rounded-2xl shadow-lg p-8 hover:shadow-2xl transition-all duration-300 border border-gray-100 hover:border-gray-200 transform hover:-translate-y-2"
             >
-              <div className="flex items-center justify-center w-12 h-12 bg-blue-100 rounded-lg mb-4">
-                <feature.icon className="w-6 h-6 text-blue-600" />
+              <div className={`inline-flex items-center justify-center w-14 h-14 ${feature.color} rounded-xl mb-6 group-hover:scale-110 transition-transform duration-200`}>
+                <feature.icon className="w-7 h-7 text-white" />
               </div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">
+              <h3 className="text-xl font-semibold text-gray-900 mb-3 group-hover:text-blue-600 transition-colors">
                 {feature.title}
               </h3>
-              <p className="text-gray-600 text-sm">
+              <p className="text-gray-600 text-sm leading-relaxed">
                 {feature.description}
               </p>
+              <div className="flex items-center mt-4 text-blue-600 group-hover:text-blue-700">
+                <span className="text-sm font-medium">Learn more</span>
+                <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
+              </div>
             </Link>
           ))}
         </div>
       </div>
 
-      {/* Stats Section */}
-      <div className="bg-white border-t border-gray-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-900">
+      {/* Stats Section with Animation */}
+      <div className="bg-white/70 backdrop-blur-sm border-y border-gray-200">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl font-bold text-gray-900 mb-4">
               Platform Overview
             </h2>
-            <p className="mt-4 text-lg text-gray-600">
+            <p className="text-lg text-gray-600">
               Real insights from our restaurant analytics platform
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-            <div className="text-center">
-              <div className="text-3xl font-bold text-blue-600">4</div>
-              <div className="text-sm text-gray-600 mt-1">Restaurants</div>
-            </div>
-            <div className="text-center">
-              <div className="text-3xl font-bold text-green-600">200+</div>
-              <div className="text-sm text-gray-600 mt-1">Orders Analyzed</div>
-            </div>
-            <div className="text-center">
-              <div className="text-3xl font-bold text-purple-600">7</div>
-              <div className="text-sm text-gray-600 mt-1">Days of Data</div>
-            </div>
-            <div className="text-center">
-              <div className="text-3xl font-bold text-orange-600">24/7</div>
-              <div className="text-sm text-gray-600 mt-1">Real-time Insights</div>
-            </div>
+            {stats.map((stat, index) => {
+              const IconComponent = stat.icon;
+              return (
+                <div 
+                  key={stat.label}
+                  className="text-center p-6 rounded-2xl hover:bg-gray-50 bg-white shadow-lg transition-all duration-300"
+                >
+                  <div className="flex justify-center mb-4">
+                    <div className="w-12 h-12 rounded-xl bg-gray-100 flex items-center justify-center">
+                      <IconComponent className="w-6 h-6 text-gray-600" />
+                    </div>
+                  </div>
+                  <div className={`text-4xl font-bold ${stat.color} mb-2`}>
+                    {stat.number}
+                  </div>
+                  <div className="text-gray-600 font-medium">{stat.label}</div>
+                </div>
+              );
+            })}
           </div>
         </div>
       </div>
 
-      {/* Footer */}
-      <footer className="bg-gray-800">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <div className="text-center text-gray-400">
-            <p>&copy; 2025 Restaurant Analytics Dashboard. Built with Laravel & Next.js.</p>
+      {/* Enhanced Footer */}
+      <footer className="bg-gradient-to-r from-gray-900 to-gray-800">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="col-span-2">
+              <div className="flex items-center space-x-2 mb-4">
+                <div className="w-8 h-8 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-lg flex items-center justify-center">
+                  <BarChart3 className="w-5 h-5 text-white" />
+                </div>
+                <span className="text-xl font-bold text-white">Restaurant Analytics</span>
+              </div>
+              <p className="text-gray-400 mb-4 max-w-md">
+                Empowering restaurant owners with powerful analytics and insights to drive growth and optimize operations.
+              </p>
+              <p className="text-sm text-gray-500">
+                &copy; 2025 Restaurant Analytics Dashboard. Built with Laravel & Next.js.
+              </p>
+            </div>
+            
+            <div>
+              <h4 className="text-white font-semibold mb-4">Platform</h4>
+              <ul className="space-y-2 text-gray-400">
+                <li><Link href="/restaurants" className="hover:text-white transition-colors">Restaurants</Link></li>
+                <li><Link href="/analytics" className="hover:text-white transition-colors">Analytics</Link></li>
+              </ul>
+            </div>
           </div>
         </div>
       </footer>

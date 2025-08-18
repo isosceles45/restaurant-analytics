@@ -90,3 +90,17 @@ export interface FilterOptions {
     max?: number;
   };
 }
+
+export interface FilterOptions {
+  search?: string;
+  location?: string;
+  cuisine?: string;
+  startDate?: string;
+  endDate?: string;
+  startHour?: string;
+  endHour?: string;
+  minAmount?: string;
+  maxAmount?: string;
+  sortBy?: 'name' | 'total_revenue' | 'total_orders' | 'average_order_value' | 'location' | 'cuisine';
+  sortOrder?: 'asc' | 'desc';
+}

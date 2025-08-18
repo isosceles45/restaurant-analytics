@@ -46,15 +46,39 @@ class FilterController extends Controller
             $restaurantId = $request->get('restaurant_id');
             $minAmount = $request->get('min_amount');
             $maxAmount = $request->get('max_amount');
+            $startHour = $request->get('start_hour');
+            $endHour = $request->get('end_hour');
             $page = (int) $request->get('page', 1);
             $perPage = min((int) $request->get('per_page', 20), 100);
+            
+            // Validate hour range
+            if ($startHour !== null && $endHour !== null) {
+                $startHour = (int) $startHour;
+                $endHour = (int) $endHour;
+                
+                if ($startHour < 0 || $startHour > 23 || $endHour < 0 || $endHour > 23) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Hour values must be between 0 and 23'
+                    ], 400);
+                }
+                
+                if ($startHour > $endHour) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Start hour must be less than or equal to end hour'
+                    ], 400);
+                }
+            }
             
             $orders = $this->filterService->filterOrdersByDateRange(
                 $startDate, 
                 $endDate, 
                 $restaurantId, 
                 $minAmount, 
-                $maxAmount
+                $maxAmount,
+                $startHour,
+                $endHour
             );
             
             $total = count($orders);
@@ -69,6 +93,15 @@ class FilterController extends Controller
                     'per_page' => $perPage,
                     'total' => $total,
                     'last_page' => ceil($total / $perPage)
+                ],
+                'filters_applied' => [
+                    'start_date' => $startDate,
+                    'end_date' => $endDate,
+                    'restaurant_id' => $restaurantId,
+                    'min_amount' => $minAmount,
+                    'max_amount' => $maxAmount,
+                    'start_hour' => $startHour,
+                    'end_hour' => $endHour
                 ],
                 'message' => 'Orders filtered successfully'
             ]);

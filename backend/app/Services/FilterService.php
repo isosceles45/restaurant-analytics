@@ -44,7 +44,7 @@ class FilterService
         });
     }
 
-    public function filterOrdersByDateRange($startDate = null, $endDate = null, $restaurantId = null, $minAmount = null, $maxAmount = null)
+    public function filterOrdersByDateRange($startDate = null, $endDate = null, $restaurantId = null, $minAmount = null, $maxAmount = null, $startHour = null, $endHour = null)
     {
         $orders = $this->dataService->getOrders();
         
@@ -70,6 +70,13 @@ class FilterService
         if ($maxAmount !== null) {
             $orders = array_filter($orders, function($order) use ($maxAmount) {
                 return $order['order_amount'] <= $maxAmount;
+            });
+        }
+        
+        if ($startHour !== null && $endHour !== null) {
+            $orders = array_filter($orders, function($order) use ($startHour, $endHour) {
+                $hour = (int) date('H', strtotime($order['order_time']));
+                return $hour >= $startHour && $hour <= $endHour;
             });
         }
         

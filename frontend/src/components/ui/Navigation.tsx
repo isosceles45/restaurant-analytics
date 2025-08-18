@@ -3,11 +3,13 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useState } from 'react';
-import { Menu, X, Store, BarChart3 } from 'lucide-react';
+import { Menu, X, Store, BarChart3, Package2 } from 'lucide-react';
 
 const navigation = [
   { name: 'Restaurants', href: '/restaurants', icon: Store },
   { name: 'Analytics', href: '/analytics', icon: BarChart3 },
+  { name: 'Orders', href: '/orders', icon: Package2 },
+
 ];
 
 export default function Navigation() {
@@ -20,7 +22,7 @@ export default function Navigation() {
         <div className="flex justify-between h-16">
           <div className="flex">
             <div className="flex-shrink-0 flex items-center">
-              <Link href="/" className="text-xl font-bold text-gray-900">
+              <Link href="/" className="text-xl font-bold bg-gradient-to-r from-gray-900 via-blue-900 to-indigo-900 bg-clip-text text-transparent">
                 Restaurant Analytics
               </Link>
             </div>

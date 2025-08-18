@@ -19,12 +19,17 @@ class RestaurantController extends Controller
         try {
             $page = (int) $request->get('page', 1);
             $perPage = min((int) $request->get('per_page', 10), 50);
+            $sortBy = $request->get('sort_by', 'name'); // name, total_revenue, total_orders, average_order_value
+            $sortOrder = $request->get('sort_order', 'asc'); // asc, desc
             
             if ($request->has('page') || $request->has('per_page')) {
                 $result = $this->dataService->getRestaurantsPaginated($page, $perPage);
                 
                 // Add analytics to each restaurant
                 $result['data'] = array_map([$this, 'addAnalyticsToRestaurant'], $result['data']);
+                
+                // Sort restaurants
+                $result['data'] = $this->sortRestaurants($result['data'], $sortBy, $sortOrder);
                 
                 return response()->json([
                     'success' => true,
@@ -43,6 +48,9 @@ class RestaurantController extends Controller
             
             // Add analytics to each restaurant
             $restaurants = array_map([$this, 'addAnalyticsToRestaurant'], $restaurants);
+            
+            // Sort restaurants
+            $restaurants = $this->sortRestaurants($restaurants, $sortBy, $sortOrder);
             
             return response()->json([
                 'success' => true,
@@ -103,5 +111,38 @@ class RestaurantController extends Controller
             'total_revenue' => $totalRevenue,
             'average_order_value' => $averageOrderValue,
         ]);
+    }
+
+    private function sortRestaurants($restaurants, $sortBy, $sortOrder)
+    {
+        usort($restaurants, function($a, $b) use ($sortBy, $sortOrder) {
+            $comparison = 0;
+            
+            switch ($sortBy) {
+                case 'total_revenue':
+                    $comparison = $a['total_revenue'] <=> $b['total_revenue'];
+                    break;
+                case 'total_orders':
+                    $comparison = $a['total_orders'] <=> $b['total_orders'];
+                    break;
+                case 'average_order_value':
+                    $comparison = $a['average_order_value'] <=> $b['average_order_value'];
+                    break;
+                case 'location':
+                    $comparison = strcmp($a['location'], $b['location']);
+                    break;
+                case 'cuisine':
+                    $comparison = strcmp($a['cuisine'], $b['cuisine']);
+                    break;
+                case 'name':
+                default:
+                    $comparison = strcmp($a['name'], $b['name']);
+                    break;
+            }
+            
+            return $sortOrder === 'desc' ? -$comparison : $comparison;
+        });
+        
+        return $restaurants;
     }
 }

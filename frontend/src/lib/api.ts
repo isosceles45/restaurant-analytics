@@ -10,7 +10,12 @@ export const api = axios.create({
 });
 
 export const restaurantApi = {
-  getAll: (params?: { page?: number; per_page?: number }) => 
+  getAll: (params?: { 
+    page?: number; 
+    per_page?: number; 
+    sort_by?: string; 
+    sort_order?: string; 
+  }) => 
     api.get('/restaurants', { params }),
   
   getById: (id: number) => 
@@ -41,6 +46,8 @@ export const ordersApi = {
     restaurant_id?: number;
     min_amount?: number;
     max_amount?: number;
+    start_hour?: number;
+    end_hour?: number;
     page?: number;
     per_page?: number;
   }) => api.get('/filter/orders', { params })

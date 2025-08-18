@@ -141,15 +141,15 @@ export default function RestaurantDetailPage() {
               <div className="space-y-2">
                 <div className="flex justify-between">
                   <span className="text-gray-600">Total Orders:</span>
-                  <span className="font-semibold">{analytics.summary.total_orders}</span>
+                  <span className="font-semibold text-black">{analytics.summary.total_orders}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-600">Total Revenue:</span>
-                  <span className="font-semibold">{formatCurrency(analytics.summary.total_revenue)}</span>
+                  <span className="font-semibold text-black">{formatCurrency(analytics.summary.total_revenue)}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-600">Avg Order Value:</span>
-                  <span className="font-semibold">{formatCurrency(analytics.summary.average_order_value)}</span>
+                  <span className="font-semibold text-black">{formatCurrency(analytics.summary.average_order_value)}</span>
                 </div>
               </div>
             </div>
@@ -159,19 +159,19 @@ export default function RestaurantDetailPage() {
               <div className="space-y-2">
                 <div className="flex justify-between">
                   <span className="text-gray-600">Peak Hour:</span>
-                  <span className="font-semibold">
+                  <span className="font-semibold text-black">
                     {analytics.hourly_distribution.peak_hour}:00
                   </span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-600">Peak Hour Orders:</span>
-                  <span className="font-semibold">
+                  <span className="font-semibold text-black">
                     {analytics.hourly_distribution.peak_hour_orders}
                   </span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-600">Busiest Day:</span>
-                  <span className="font-semibold">
+                  <span className="font-semibold text-black">
                     {analytics.daily_stats.reduce((max, day) => 
                       day.orders_count > max.orders_count ? day : max
                     ).date}
@@ -185,19 +185,19 @@ export default function RestaurantDetailPage() {
               <div className="space-y-2">
                 <div className="flex justify-between">
                   <span className="text-gray-600">Avg Orders/Day:</span>
-                  <span className="font-semibold">
+                  <span className="font-semibold text-black">
                     {Math.round(analytics.summary.total_orders / analytics.daily_stats.length)}
                   </span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-600">Avg Revenue/Day:</span>
-                  <span className="font-semibold">
+                  <span className="font-semibold text-black">
                     {formatCurrency(analytics.summary.total_revenue / analytics.daily_stats.length)}
                   </span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-gray-600">Active Days:</span>
-                  <span className="font-semibold">{analytics.daily_stats.length}</span>
+                  <span className="text-gray-600 text-black">Active Days:</span>
+                  <span className="font-semibold text-black">{analytics.daily_stats.length}</span>
                 </div>
               </div>
             </div>
