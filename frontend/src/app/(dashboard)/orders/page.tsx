@@ -28,7 +28,7 @@ export default function OrdersPage() {
   const [filters, setFilters] = useState<OrderFilters>({});
   const [page, setPage] = useState(1);
   const [showFilters, setShowFilters] = useState(false);
-  const perPage = 20;
+  const perPage = 10;
 
   // Fetch restaurants for dropdown
   const { data: restaurantsData } = useQuery({
