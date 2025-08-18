@@ -10,17 +10,13 @@ import { formatCurrency, getDefaultDateRange } from '@/lib/utils';
 import DateRangePicker from '@/components/ui/DateRangePicker';
 import { LoadingPage } from '@/components/ui/LoadingSpinner';
 import { AverageOrderValueChart, DailyOrdersChart, DailyRevenueChart, PeakHoursChart } from '@/components/charts/AnalyticsChart';
+import { useParams } from 'next/navigation';
 
 
-interface RestaurantDetailPageProps {
-  params: {
-    id: string;
-  };
-}
-
-export default function RestaurantDetailPage({ params }: RestaurantDetailPageProps) {
+export default function RestaurantDetailPage() {
   const [dateRange, setDateRange] = useState<DateRange>(getDefaultDateRange());
-  const restaurantId = parseInt(params.id);
+  const { id } = useParams<{ id: string }>();
+  const restaurantId = parseInt(id);
 
   const {
     data: restaurantData,

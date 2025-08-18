@@ -131,7 +131,7 @@ export default function RestaurantsPage() {
           {pagination && pagination.last_page > 1 && !isFiltered && (
             <div className="mt-8 flex items-center justify-between">
               <div className="text-sm text-gray-700">
-                Showing {pagination.from} to {pagination.to} of {pagination.total} restaurants
+                Showing {pagination.current_page} to {pagination.last_page} of {pagination.total} restaurants
               </div>
               <div className="flex space-x-2">
                 <button

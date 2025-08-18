@@ -29,7 +29,7 @@ export default function RestaurantCard({ restaurant }: RestaurantCardProps) {
   });
 
   // Create chart data from real API data
-  const chartData = analyticsData?.data?.daily_stats?.map(stat => ({
+  const chartData = analyticsData?.data?.daily_stats?.map((stat: { date: string | number | Date; orders_count: number; revenue: number; }) => ({
     date: new Date(stat.date).toLocaleDateString('en', { weekday: 'short' }),
     orders: stat.orders_count,
     revenue: stat.revenue,

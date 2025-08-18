@@ -110,10 +110,15 @@ export function PeakHoursChart({ data }: PeakHoursChartProps) {
             formatter={(value) => [value, 'Orders']}
             labelStyle={{ color: '#374151' }}
           />
-          <Bar 
-            dataKey="orders" 
-            fill={(entry) => entry?.orders === maxOrders ? '#F59E0B' : '#8B5CF6'}
-          />
+          <Bar dataKey="orders">
+            {chartData.map((entry, index) => (
+              <Cell 
+                key={`cell-${index}`} 
+                fill={entry.orders === maxOrders ? '#F59E0B' : '#8B5CF6'} 
+              />
+            ))}
+          </Bar>
+
         </BarChart>
       </ResponsiveContainer>
     </div>
