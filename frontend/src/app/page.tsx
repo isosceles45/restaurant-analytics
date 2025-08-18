@@ -1,8 +1,7 @@
 import Link from 'next/link';
-import { BarChart3, Store, TrendingUp, Users, Clock, ArrowRight } from 'lucide-react';
+import { BarChart3, Store, TrendingUp, Users, Clock, ArrowRight, ShoppingCart, Filter } from 'lucide-react';
 
 export default function HomePage() {
-
 
   const features = [
     {
@@ -22,21 +21,13 @@ export default function HomePage() {
       hoverColor: 'hover:bg-green-600',
     },
     {
-      icon: TrendingUp,
-      title: 'Order Trends',
-      description: 'Track daily orders, revenue patterns, and identify peak dining hours across all locations.',
-      href: '/restaurants',
-      color: 'bg-purple-500',
-      hoverColor: 'hover:bg-purple-600',
-    },
-    {
-      icon: Users,
-      title: 'Performance Insights',
-      description: 'Compare restaurant performance metrics and discover untapped growth opportunities.',
-      href: '/analytics',
-      color: 'bg-orange-500',
-      hoverColor: 'hover:bg-orange-600',
-    },
+      icon: ShoppingCart,
+      title: 'Order Analytics',
+      description: 'Filter and analyze orders by date range, restaurant, amount, and hour range with advanced filtering tools.',
+      href: '/orders',
+      color: 'bg-indigo-500',
+      hoverColor: 'hover:bg-indigo-600',
+    }
   ];
 
   const stats = [
@@ -58,7 +49,7 @@ export default function HomePage() {
             </h1>
             <p className="text-xl text-gray-600 mb-8 max-w-3xl mx-auto leading-relaxed">
               Analyze order trends, track revenue patterns, and discover peak dining hours across 4 restaurants with 200+ orders analyzed. 
-              Make data-driven decisions to optimize your restaurant operations.
+              Filter orders by date, amount, hour range, and restaurant to make data-driven decisions.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
               <Link
@@ -73,6 +64,12 @@ export default function HomePage() {
                 className="border-2 border-gray-300 text-gray-700 px-8 py-4 rounded-xl font-semibold hover:border-blue-500 hover:text-blue-600 transition-all duration-200 bg-white/50 backdrop-blur-sm"
               >
                 Browse Restaurants
+              </Link>
+              <Link
+                href="/orders"
+                className="border-2 border-indigo-300 text-indigo-700 px-8 py-4 rounded-xl font-semibold hover:border-indigo-500 hover:text-indigo-800 transition-all duration-200 bg-white/50 backdrop-blur-sm"
+              >
+                Filter Orders
               </Link>
             </div>
           </div>
@@ -90,7 +87,7 @@ export default function HomePage() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {features.map((feature, index) => (
             <Link
               key={feature.title}
@@ -175,6 +172,7 @@ export default function HomePage() {
               <ul className="space-y-2 text-gray-400">
                 <li><Link href="/restaurants" className="hover:text-white transition-colors">Restaurants</Link></li>
                 <li><Link href="/analytics" className="hover:text-white transition-colors">Analytics</Link></li>
+                <li><Link href="/orders" className="hover:text-white transition-colors">Orders</Link></li>
               </ul>
             </div>
           </div>
